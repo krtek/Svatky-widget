@@ -59,10 +59,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="44" selection-start="529" selection-end="529" vertical-scroll-proportion="0.0">
+            <state line="16" column="19" selection-start="752" selection-end="752" vertical-scroll-proportion="0.119804405">
               <folding />
             </state>
           </provider>
@@ -86,10 +86,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="strings.xml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="strings.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="34" selection-start="922" selection-end="922" vertical-scroll-proportion="0.6748166">
+            <state line="23" column="34" selection-start="922" selection-end="922" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -98,7 +98,7 @@
       <file leaf-file-name="SvatkyWidget.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cz/krtinec/svatky/SvatkyWidget.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="103" column="121" selection-start="3935" selection-end="3935" vertical-scroll-proportion="0.0">
+            <state line="111" column="104" selection-start="4407" selection-end="4407" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -585,22 +585,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cz/krtinec/svatky/SvatkyWidget.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="103" column="121" selection-start="3935" selection-end="3935" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="44" selection-start="529" selection-end="529" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/svatky.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
@@ -617,7 +601,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="34" selection-start="922" selection-end="922" vertical-scroll-proportion="0.6748166">
+        <state line="23" column="34" selection-start="922" selection-end="922" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cz/krtinec/svatky/SvatkyWidget.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="111" column="104" selection-start="4407" selection-end="4407" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="16" column="19" selection-start="752" selection-end="752" vertical-scroll-proportion="0.119804405">
           <folding />
         </state>
       </provider>
