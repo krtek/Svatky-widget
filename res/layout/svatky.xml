@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This file is part of Svatky Widget.
+  ~
+  ~ Svatky Widget is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ Svatky Widget is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with Svatky Widget.  If not, see <http://www.gnu.org/licenses/>.
+  ~
+  ~ Copyright (c) Lukas Marek, 2011.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    style="@style/WidgetBackground"
+    android:id="@+id/layout"
+    >
+<LinearLayout android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal">
+	<TextView android:id="@+id/date" 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content" 
+    	android:text="@string/date"
+	    android:textColor="#FFFFFFFF"
+	    android:textSize="10dip"    
+		 
+	/>    
+</LinearLayout>
+<LinearLayout android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical">
+<ImageView 
+		android:id="@+id/flag" 
+		android:src="@drawable/cs_flag" 
+		android:layout_width="30dip" 
+		android:layout_height="20dip" 
+	/>
+<LinearLayout android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+	<TextView 
+		android:id="@+id/today" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    android:layout_marginTop="1dip"
+	    android:layout_marginLeft="5dip"
+	    android:text="@string/who"
+	    android:textColor="#FFFFFFFF"    
+	    />
+	<TextView 
+		android:id="@+id/tommorow" 
+	    android:layout_width="wrap_content" 
+	    android:layout_height="wrap_content" 
+	    android:layout_marginTop="1dip"
+	    android:layout_marginLeft="5dip"
+	    android:textSize="10dip"
+	    android:text="@string/who"
+	    android:textColor="#FFFFFFFF"
+	        />
+	
+    
+</LinearLayout>
+</LinearLayout>
+
+
+</LinearLayout>
