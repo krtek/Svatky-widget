@@ -62,7 +62,7 @@
       <file leaf-file-name="AndroidManifest.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="32" selection-start="962" selection-end="962" vertical-scroll-proportion="0.44230768">
+            <state line="20" column="14" selection-start="811" selection-end="811" vertical-scroll-proportion="0.3846154">
               <folding />
             </state>
           </provider>
@@ -481,7 +481,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="32" selection-start="962" selection-end="962" vertical-scroll-proportion="0.44230768">
+        <state line="20" column="14" selection-start="811" selection-end="811" vertical-scroll-proportion="0.3846154">
           <folding />
         </state>
       </provider>
