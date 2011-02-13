@@ -147,7 +147,6 @@ public class SvatkyWidget extends AppWidgetProvider {
 		public void onStart(Intent intent, int startId) {
 			
             // Push update for this widget to the home screen
-            ComponentName thisWidget = new ComponentName(this, SvatkyWidget.class);
             AppWidgetManager manager = AppWidgetManager.getInstance(this);
             RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.svatky);
             Bundle extras = intent.getExtras();
@@ -157,7 +156,9 @@ public class SvatkyWidget extends AppWidgetProvider {
             }
 
             Log.d("UpdateService", "onStart() called with widgetID: " + widgetID);
-            updateViews(this, SvatkyLocale.cs, views);
+            SvatkyLocale locale = SvatkyLocale.valueOf(
+                    this.getSharedPreferences(SVATKY, 0).getString(String.valueOf(widgetID), SvatkyLocale.cs.toString()));
+            updateViews(this, locale , views);
             Intent i = new Intent(getApplicationContext(), SvatkyWidget.class);
             Uri uri = Uri.parse("content://cz.krtinec.svatky/svatky");
             i.setData(uri);
