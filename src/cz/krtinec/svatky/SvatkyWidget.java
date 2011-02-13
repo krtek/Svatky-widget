@@ -22,12 +22,8 @@ package cz.krtinec.svatky;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.http.client.utils.URIUtils;
+import java.io.Serializable;
+import java.util.*;
 
 
 import android.app.PendingIntent;
@@ -39,83 +35,69 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.RemoteViews;
 
 public class SvatkyWidget extends AppWidgetProvider {
+    static Map<String,Holiday> namedays;
 	static final String LNG_CHANGE = "LngChange";
-	
-	 public void onUpdate(Context context, AppWidgetManager appWidgetManager,
+    public static final String SVATKY = "Svatky";
+
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager,
 		        int[] appWidgetIds) {
 		        // To prevent any ANR timeouts, we perform the update in a service
-		        context.startService(new Intent(context, UpdateService.class));
+                for (int i: appWidgetIds) {
+                    Intent intent = new Intent(context, UpdateService.class);
+                    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, i);
+                    context.startService(intent);
+                }
 		    }
-	 
-	 
+
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		super.onReceive(context, intent);
 		Log.i("SvatkyWidget", "Received " + intent);
-		Log.i("SvatkyWidget", "Received " + intent.getAction());
-		Log.i("SvatkyWidget", "Received " + intent.getData());
-		if (LNG_CHANGE.equals(intent.getAction())) {			
-	        RemoteViews views = new RemoteViews("cz.krtinec.svatky", R.layout.svatky);
-	        //change locale
-	        SvatkyLocale loc = SvatkyLocale.valueOf(context.getSharedPreferences("Svatky", 0).getString("lang", SvatkyLocale.cs.toString()));
-	        SharedPreferences.Editor editor = context.getSharedPreferences("Svatky", 0).edit();
-	        if (loc.equals(SvatkyLocale.cs)) {
-	        	editor.putString("lang", SvatkyLocale.sk.abbr);
-	        } else {
-	        	editor.putString("lang", SvatkyLocale.cs.abbr);
-	        }
-	        editor.commit();
-	        loc = SvatkyLocale.valueOf(context.getSharedPreferences("Svatky", 0).getString("lang", SvatkyLocale.cs.toString()));
-	        UpdateService.updateViews(loc, views);
-	        AppWidgetManager manager = AppWidgetManager.getInstance(context);
-	        ComponentName thisWidget = new ComponentName(context, SvatkyWidget.class);
-	        manager.updateAppWidget(thisWidget, views);
+		Log.d("SvatkyWidget", "Received " + intent.getAction());
 
-		}		
+        Bundle extras = intent.getExtras();
+        int widgetID = AppWidgetManager.INVALID_APPWIDGET_ID;
+        if(extras!=null) {
+            widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+        }
+		if (LNG_CHANGE.equals(intent.getAction())) {
+	        RemoteViews views = new RemoteViews("cz.krtinec.svatky", R.layout.svatky);
+            SvatkyLocale locale = SvatkyLocale.valueOf(
+                    context.getSharedPreferences(SVATKY, 0).getString(String.valueOf(widgetID), SvatkyLocale.cs.toString()));
+
+	        //change locale
+            Log.d("SvatkyWidget", "Widget id: " + widgetID);
+	        if (SvatkyLocale.cs.equals(locale)) {
+	        	locale = SvatkyLocale.sk;
+	        } else {
+	        	locale = SvatkyLocale.cs;
+	        }
+            SharedPreferences.Editor editor = context.getSharedPreferences(SVATKY, 0).edit();
+            editor.putString(String.valueOf(widgetID), locale.toString());
+            editor.commit();
+
+	        updateViews(context, locale, views);
+	        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+	        manager.updateAppWidget(widgetID, views);
+		}
 	}
 
 
-	public static class UpdateService extends Service {
-		static Map<String,Holiday> namedays;
 
-		@Override
-		public IBinder onBind(Intent intent) {
-			// TODO Auto-generated method stub
-			return null;		
-		}
-
-		@Override
-		public void onStart(Intent intent, int startId) {				
-			namedays = new HashMap<String, Holiday>();
-			loadNamedays(namedays);		
-			
-            // Push update for this widget to the home screen
-            ComponentName thisWidget = new ComponentName(this, SvatkyWidget.class);
-            AppWidgetManager manager = AppWidgetManager.getInstance(this);
-            SvatkyLocale loc = SvatkyLocale.valueOf(getApplicationContext().getSharedPreferences("Svatky", 0).getString("lang", SvatkyLocale.cs.abbr));
-            
-            RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.svatky);           
-            
-            updateViews(loc, views);
-            Intent i = new Intent(getApplicationContext(), SvatkyWidget.class);
-            Uri uri = Uri.parse("content://cz.krtinec.svatky/svatky");
-            i.setData(uri);
-            i.setAction(LNG_CHANGE);
-            views.setOnClickPendingIntent(R.id.layout, PendingIntent.getBroadcast(getApplicationContext(), 0, i, PendingIntent.FLAG_CANCEL_CURRENT));
-            manager.updateAppWidget(thisWidget, views);
-            stopSelf();
-            
-		}
-
-		static void updateViews(SvatkyLocale loc, RemoteViews views) {
-			final Calendar calendar = Calendar.getInstance(); 
+    static void updateViews(Context ctx, SvatkyLocale loc, RemoteViews views) {
+            if (namedays == null) {
+                namedays = new HashMap<String, Holiday>();
+                loadNamedays(ctx, namedays);
+            }
+			final Calendar calendar = Calendar.getInstance();
 			final Date todayDate = calendar.getTime();
 			calendar.add(Calendar.DAY_OF_YEAR, 1);
 			final Date tommorowDate =  calendar.getTime();
@@ -125,18 +107,19 @@ public class SvatkyWidget extends AppWidgetProvider {
 			Log.i("UpdateService", tommorow + ":" + namedays.get(tommorow));
 			views.setTextViewText(R.id.date, DateFormat.format("d.M.yyyy", todayDate).toString());
 			if (loc.equals(SvatkyLocale.cs)) {
-	            views.setTextViewText(R.id.today, namedays.get(today).cz);            
-	            views.setTextViewText(R.id.tommorow, namedays.get(tommorow).cz);	            
+	            views.setTextViewText(R.id.today, namedays.get(today).cz);
+	            views.setTextViewText(R.id.tommorow, namedays.get(tommorow).cz);
 	            views.setImageViewResource(R.id.flag, R.drawable.cs_flag);
             } else {
-	            views.setTextViewText(R.id.today, namedays.get(today).sk);            
-	            views.setTextViewText(R.id.tommorow, namedays.get(tommorow).sk);	            
-	            views.setImageViewResource(R.id.flag, R.drawable.sk_flag);            	
+	            views.setTextViewText(R.id.today, namedays.get(today).sk);
+	            views.setTextViewText(R.id.tommorow, namedays.get(tommorow).sk);
+	            views.setImageViewResource(R.id.flag, R.drawable.sk_flag);
             }
 		}
 
-		private void loadNamedays(Map<String, Holiday> map) {
-			BufferedReader br = new BufferedReader(new InputStreamReader(getResources().openRawResource(R.raw.cz_sk)));
+    	static void loadNamedays(Context ctx, Map<String, Holiday> map) {
+			BufferedReader br = new BufferedReader(
+                    new InputStreamReader(ctx.getResources().openRawResource(R.raw.cz_sk)));
 			String line;
 			try {
 				while ((line = br.readLine()) != null) {
@@ -144,11 +127,49 @@ public class SvatkyWidget extends AppWidgetProvider {
 					map.put(split[2].trim(), new Holiday(split[0].trim(), split[1].trim()));
 				}
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                //Don't know what to do so fail gracefully
+				throw new IllegalStateException("Cannot open holidays!", e);
 			}
 		}
-		
+
+
+	public static class UpdateService extends Service {
+
+
+
+		@Override
+		public IBinder onBind(Intent intent) {
+			// TODO Auto-generated method stub
+			return null;		
+		}
+
+		@Override
+		public void onStart(Intent intent, int startId) {
+			
+            // Push update for this widget to the home screen
+            ComponentName thisWidget = new ComponentName(this, SvatkyWidget.class);
+            AppWidgetManager manager = AppWidgetManager.getInstance(this);
+            RemoteViews views = new RemoteViews(this.getPackageName(), R.layout.svatky);
+            Bundle extras = intent.getExtras();
+            int widgetID = AppWidgetManager.INVALID_APPWIDGET_ID;
+            if(extras!=null) {
+                widgetID = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID);
+            }
+
+            Log.d("UpdateService", "onStart() called with widgetID: " + widgetID);
+            updateViews(this, SvatkyLocale.cs, views);
+            Intent i = new Intent(getApplicationContext(), SvatkyWidget.class);
+            Uri uri = Uri.parse("content://cz.krtinec.svatky/svatky");
+            i.setData(uri);
+            i.setAction(LNG_CHANGE);
+            i.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetID);
+            PendingIntent broadcastIntent = PendingIntent.getBroadcast(getApplicationContext(), widgetID, i, PendingIntent.FLAG_CANCEL_CURRENT);
+
+            views.setOnClickPendingIntent(R.id.layout, broadcastIntent);
+            manager.updateAppWidget(widgetID, views);
+            stopSelf();
+            
+		}
     } 
 }
 
